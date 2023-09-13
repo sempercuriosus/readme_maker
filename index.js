@@ -2,9 +2,7 @@
 
 // TODO: Create an array of questions for user input
 
-const questions = [
-    // so questions can be reordered, this is a number:questionText key:value pair
-];
+const questions = [];
 
 // TODO: Create a function to write README file
 function writeToFile (fileName, data) { }
