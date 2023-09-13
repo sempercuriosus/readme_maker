@@ -7,7 +7,7 @@ const questions = [
     "What is the application's purpose? Enter in a brief description.",
     "Does the application have any dependancies?",
     "How can the user install the application?",
-    "Are there user options?",
+    "Are there user configurations?",
     "Who wrote this application?",
     "What is the author's email address?",
     "What is the author's Github username?",
