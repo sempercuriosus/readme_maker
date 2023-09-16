@@ -45,10 +45,10 @@ const questions = [
         message: "How can the user install the application?",
     },
     {
-        type: "input",
+        type: "list",
         name: "configs",
         message: "Are there user configurations?",
-        default: false
+        choices: ["true", "false"]
     },
     {
         type: "input",
@@ -74,7 +74,7 @@ const questions = [
         type: "list",
         name: "license",
         message: "What License do you want to use?",
-        choices: ['MIT', 'APACHE 2.0', 'GPL 3.0', 'BSD 3', 'None'],
+        choices: ["MIT", "APACHE 2.0", "GPL 3.0", "BSD 3", "None"],
     },
     {
         type: "input",
@@ -95,10 +95,30 @@ function init ()
 {
     console.log(initNote);
 
-    inq
-        .prompt;
+    inq.prompt(questions).then((answers) =>
+    {
+        // use to log the data that are captured by inquirer
+        // let testData = `
+        // title - ${answers.title}
+        // description - ${answers.description}
+        // dependancies - ${answers.dependancies}
+        // tests - ${answers.tests}
+        // install - ${answers.install}
+        // configs - ${answers.configs}
+        // author - ${answers.author}
+        // author_email - ${answers.author_email}
+        // author_github - ${answers.author_github}
+        // author_contact - ${answers.author_contact}
+        // license - ${answers.license}
+        // contribute - ${answers.contribute}
+        // `;
+        // console.log("the data captured are", testData);
 
-    console.log(endNote);
+        console.log(endNote);
+    }).catch((error) =>
+    {
+        console.log("During processing, there was an error that occurred", error);
+    });
 }
 
 // Function call to initialize app
