@@ -2,6 +2,7 @@
 // Needed Inquirer
 const inq = require("inquirer");
 const fs = require("fs");
+const generateMarkdown = require("./utils/generateMarkdown");
 
 // #region Text the user will see
 //
@@ -30,8 +31,8 @@ const questions = [
     },
     {
         type: "input",
-        name: "dependancies",
-        message: "To install dependancies what command can be used?",
+        name: "dependencies",
+        message: "To install dependencies what command can be used?",
         default: 'npm i',
     },
     {
@@ -125,7 +126,7 @@ function init ()
         //
         // #endregion Test Log
 
-        writeToFile("README.md", "-default write -");
+        writeToFile("README.md", generateMarkdown(answers));
         console.log(endNote);
     }).catch((error) =>
     {
