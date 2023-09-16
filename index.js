@@ -1,6 +1,7 @@
 // TODO: Include packages needed for this application
 // Needed Inquirer
 const inq = require("inquirer");
+const fs = require("fs");
 
 // #region Text the user will see
 //
@@ -88,7 +89,12 @@ const questions = [
 // #endregion Questions
 
 // TODO: Create a function to write README file
-function writeToFile (fileName, data) { }
+function writeToFile (fileName, data)
+{
+    // since we are going to 1. need to wait for answers to come in and 2. not doing a large write doing with the synchronous
+    console.log(process.cwd(), fileName);
+    fs.writeFileSync(process.cwd().concat(fileName), data);
+}
 
 // TODO: Create a function to initialize app
 function init ()
@@ -97,7 +103,9 @@ function init ()
 
     inq.prompt(questions).then((answers) =>
     {
+        // #region Test Log
         // use to log the data that are captured by inquirer
+
         // let testData = `
         // title - ${answers.title}
         // description - ${answers.description}
@@ -114,6 +122,10 @@ function init ()
         // `;
         // console.log("the data captured are", testData);
 
+        //
+        // #endregion Test Log
+
+        writeToFile("README.md", "-default write -");
         console.log(endNote);
     }).catch((error) =>
     {
