@@ -65,7 +65,7 @@ function generateMarkdown (data)
 {
   return `
   ${mdH1} ${data.title}
-  ${mdLabels.description}
+  ${data.description}
   ${lb} 
 
   ${mdH2} ${mdLabels.toc}
@@ -117,8 +117,9 @@ function generateMarkdown (data)
   ${lb}
 
   ${mdH2} ${mdLabels.questions}
-  ${data.author_email}
   ${data.author_contact}
+  Email Address : ${data.author_email}
+  Github : ${data.author_github}
   ${lb}
 
   ${mdH2} ${mdLabels.acknowledgement}

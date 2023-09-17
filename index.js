@@ -50,7 +50,7 @@ const questions = [
         type: "list",
         name: "configs",
         message: "Are there user configurations?",
-        choices: ["true", "false"]
+        choices: ["false", "true"]
     },
     {
         type: "input",
