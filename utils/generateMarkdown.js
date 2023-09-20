@@ -81,13 +81,11 @@ function generateMarkdown (data, dependencies)
   // note, this formatting below, albeit odd, is REQUIRED to stay as is for the ` formatted string.
 
   // add configs if needed
-
   let addConfigSection = "";
 
   if (data.configs === true)
   {
     console.info("adding config section");
-    console.error(typeof lb, lb);
     addConfigSection = mdH3
       + " "
       + mdLabels.config
