@@ -13,8 +13,6 @@ const generateMarkdown = require("./utils/generateMarkdown");
 */
 let getDependencies = () =>
 {
-    console.info("[ getDependencies ] : called");
-
     try
     {
         // Read the package.json file

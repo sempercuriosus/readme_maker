@@ -51,24 +51,92 @@ const lineBreak = "---";
  * @property {string} note            - Notes from the author
  * @property {string} license         - License Used
  */
-const mdLabels = {
-  "toc": "Table Of Contents",
-  "gettingStarted": "Getting Started",
-  "about": "About The Project",
-  "built": "Built With",
-  "started": "Getting Started",
-  "prereq": "Prerequisites & Dependencies",
-  "install": "Installation Notes",
-  "config": "Configurables",
-  "usage": "Usage",
-  "running": "Running The App",
-  "testing": "Testing",
-  "contrib": "How To Contribute",
-  "questions": "Questions",
-  "author": "Author Credit",
-  "acknowledgement": "Acknowledgments",
-  "note": "Final Note",
-  "license": "License",
+const readmeSections = {
+  "toc":
+  {
+    "label": "Table Of Contents"
+    , "include": true
+  },
+  "gettingStarted":
+  {
+    "label": "Getting Started"
+    , "include": true
+  },
+  "about":
+  {
+    "label": "About The Project"
+    , "include": true
+  },
+  "built":
+  {
+    "label": "Built With"
+    , "include": true
+  },
+  "started":
+  {
+    "label": "Getting Started"
+    , "include": true
+  },
+  "prereq":
+  {
+    "label": "Prerequisites & Dependencies"
+    , "include": true
+  },
+  "install":
+  {
+    "label": "Installation Notes"
+    , "include": true
+  },
+  "config":
+  {
+    "label": "Configurables"
+    , "include": true
+  },
+  "usage":
+  {
+    "label": "Usage"
+    , "include": true
+  },
+  "running":
+  {
+    "label": "Running The App"
+    , "include": true
+  },
+  "testing":
+  {
+    "label": "Testing"
+    , "include": true
+  },
+  "contrib":
+  {
+    "label": "How To Contribute"
+    , "include": true
+  },
+  "questions":
+  {
+    "label": "Questions"
+    , "include": true
+  },
+  "author":
+  {
+    "label": "Author Credit"
+    , "include": true
+  },
+  "acknowledgement":
+  {
+    "label": "Acknowledgments"
+    , "include": true
+  },
+  "note":
+  {
+    "label": "Final Note"
+    , "include": true
+  },
+  "license":
+  {
+    "label": "License"
+    , "include": true
+  },
 };
 
 // TODO: Create a function to generate markdown for README
@@ -98,10 +166,9 @@ function generateMarkdown (data, dependencies)
 
   if (data.configs === true)
   {
-    console.info("adding config section");
     addConfigSection = heading3
       + " "
-      + mdLabels.config
+      + readmeSections.config
       + "\n"
       + "<!-- Configurables -->"
       + "\n"
@@ -120,25 +187,25 @@ ${heading1} ${data.title}
 ${data.description}
 ${lineBreak} 
 
-${heading2} ${mdLabels.toc}
+${heading2} ${readmeSections.toc.label}
 <!-- TABLE OF CONTENTS -->
 ${lineBreak}
 
-${heading2} ${mdLabels.about}
+${heading2} ${readmeSections.about.label}
 <!-- About the Project - Full Description -->
 ${dash}
 ${lineBreak}
 
-${heading3} ${mdLabels.built}
+${heading3} ${readmeSections.built.label}
 ${techStackUsed}
 ${lineBreak}
 
-${heading2} ${mdLabels.started}
+${heading2} ${readmeSections.started.label}
 <!-- Getting Started  -->
 ${dash}
 ${lineBreak}
 
-${heading3} ${mdLabels.prereq}
+${heading3} ${readmeSections.prereq.label}
 ${data.dependency_install}
 
 List of Required Dependencies and versions
@@ -146,38 +213,38 @@ ${dependencyList}
 
 ${lineBreak}
 
-${heading3} ${mdLabels.install}
+${heading3} ${readmeSections.install.label}
 ${data.install}
 ${lineBreak}
 
-${heading2} ${mdLabels.usage}
+${heading2} ${readmeSections.usage.label}
 <!-- Usage - What is needed to use the application? -->
 ${dash}
 ${lineBreak}
 
 ${addConfigSection}
 
-${heading2} ${mdLabels.running}
+${heading2} ${readmeSections.running.label}
 <!-- Running - What is needed in running the application? -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${mdLabels.testing}
+${heading2} ${readmeSections.testing.label}
 ${dash}${data.tests}
 ${lineBreak}
 
-${heading2} ${mdLabels.contrib}
+${heading2} ${readmeSections.contrib.label}
 If you would like to contribute to the application here is how you can do that. 
 Please, follow these guidelines below.
 
 ${data.contribute}
 ${lineBreak}
 
-${heading2} ${mdLabels.author}
+${heading2} ${readmeSections.author.label}
 ${dash}${data.author}
 ${lineBreak}
 
-${heading2} ${mdLabels.questions}
+${heading2} ${readmeSections.questions.label}
 If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
 (I do not use social media of any kind.)
 
@@ -187,17 +254,17 @@ If you have any questions about the repo, open an issue, or would like to contac
 
 ${lineBreak}
 
-${heading2} ${mdLabels.acknowledgement}
+${heading2} ${readmeSections.acknowledgement.label}
 <!-- Acknowledgments -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${mdLabels.note}
+${heading2} ${readmeSections.note.label}
 <!-- Final Note -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${mdLabels.license}
+${heading2} ${readmeSections.license.label}
 ${data.license}
 ${lineBreak}
 
@@ -214,8 +281,6 @@ ${lineBreak}
 */
 let parseDependencies = (list) =>
 {
-  console.info("[ parseDependencies ] : called", list);
-
   if (list)
   {
     let markdownList = "";
@@ -244,7 +309,6 @@ let parseDependencies = (list) =>
 */
 let parseTechStack = (list) =>
 {
-  console.info("[ parseTechStack ] : called");
   if (list)
   {
     let techStack = [];
@@ -258,7 +322,6 @@ let parseTechStack = (list) =>
       // if the element is not populated with anything return null and add only those items with a value
       updatedTechStack = techStack.map(element => element ? prefix + element.trim() + suffix : null).join("");
 
-      console.log(updatedTechStack);
       return updatedTechStack;
     }
     catch {
@@ -267,6 +330,7 @@ let parseTechStack = (list) =>
   }
   else 
   {
+    // returning a dash, implying later input, if there is nothing so undefined is not listed in readme
     return dash;
   }
 
