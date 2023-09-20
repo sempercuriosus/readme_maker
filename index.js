@@ -73,12 +73,12 @@ const questions = [
     {
         type: "input",
         name: "title",
-        message: "What is the README Title?"
+        message: "What is the Title you want to use for the README?"
     },
     {
         type: "input",
         name: "description",
-        message: "What is the application's purpose? Enter in a brief description."
+        message: "Enter in a brief description about the application and the purpose it has."
     },
     {
         type: "input",
@@ -118,11 +118,11 @@ const questions = [
         name: "author_github",
         message: "What is the author's Github username?"
     },
-    {
-        type: "input",
-        name: "author_contact",
-        message: "How can the author be reached for questions?"
-    },
+    // {
+    //     type: "input",
+    //     name: "author_contact",
+    //     message: "How can the author be reached for questions?"
+    // },
     {
         type: "list",
         name: "license",

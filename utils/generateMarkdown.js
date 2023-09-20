@@ -15,14 +15,14 @@ function renderLicenseSection (license) { }
 // 
 
 // Heading 
-const mdH1 = "#";
-const mdH2 = "##";
-const mdH3 = "###";
-const mdH4 = "####";
+const heading1 = "#";
+const heading2 = "##";
+const heading3 = "###";
+const heading4 = "####";
 // List
 const dash = "-";
 //
-const lb = "---";
+const lineBreak = "---";
 
 //
 // #endregion Markdown Elements
@@ -86,95 +86,98 @@ function generateMarkdown (data, dependencies)
   if (data.configs === true)
   {
     console.info("adding config section");
-    addConfigSection = mdH3
+    addConfigSection = heading3
       + " "
       + mdLabels.config
       + "\n"
       + "<!-- Configurables -->"
       + "\n"
       + "\n"
-      + lb
+      + lineBreak
       ;
   }
 
   return `
-${mdH1} ${data.title}
+${heading1} ${data.title}
 ${data.description}
-${lb} 
+${lineBreak} 
 
-${mdH2} ${mdLabels.toc}
-  <!-- TABLE OF CONTENTS -->
-${lb}
+${heading2} ${mdLabels.toc}
+<!-- TABLE OF CONTENTS -->
+${lineBreak}
 
-${mdH2} ${mdLabels.about}
+${heading2} ${mdLabels.about}
 <!-- About the Project -->
-${lb}
+${lineBreak}
 
-${mdH3} ${mdLabels.built}
+${heading3} ${mdLabels.built}
 <!-- Built With -->
-${lb}
+${lineBreak}
 
-${mdH2} ${mdLabels.started}
+${heading2} ${mdLabels.started}
 <!-- Getting Started  -->
-${lb}
+${lineBreak}
 
-${mdH3} ${mdLabels.prereq}
+${heading3} ${mdLabels.prereq}
 ${data.dependency_install}
 
 List of Required Dependencies and versions
 ${dependencyList}
 
-${lb}
+${lineBreak}
 
-${mdH3} ${mdLabels.install}
+${heading3} ${mdLabels.install}
 ${data.install}
-${lb}
+${lineBreak}
 
-${mdH2} ${mdLabels.usage}
-<!-- Usage -->
-${lb}
+${heading2} ${mdLabels.usage}
+<!-- Usage - What is needed to use the application? -->
+${lineBreak}
 
 ${addConfigSection}
 
-${mdH2} ${mdLabels.running}
-<!-- Running -->
-${lb}
+${heading2} ${mdLabels.running}
+<!-- Running - What is needed in running the application? -->
+${lineBreak}
 
-${mdH2} ${mdLabels.testing}
+${heading2} ${mdLabels.testing}
 ${data.tests}
-${lb}
+${lineBreak}
 
-${mdH2} ${mdLabels.contrib}
+${heading2} ${mdLabels.contrib}
+If you would like to contribute to the application here is how you can do that. 
+Please, follow these guidelines below.
+
 ${data.contribute}
-${lb}
+${lineBreak}
 
-${mdH2} ${mdLabels.author}
+${heading2} ${mdLabels.author}
 ${data.author}
-${lb}
+${lineBreak}
 
-${mdH2} ${mdLabels.questions}
-  If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
-  (I do not use social media of any kind.)
+${heading2} ${mdLabels.questions}
+If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
+(I do not use social media of any kind.)
 
-    - <a href="mailto:${data.email}">Send Me An Email</a> 
-    - You can find more of my work on my Github [${data.github}](https://github.com/${data.github}/)
-    - Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
+  ${dash} <a href="mailto:${data.email}">Send Me An Email</a> 
+  ${dash} You can find more of my work on my Github [${data.github}](https://github.com/${data.github}/)
+  ${dash} Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
 
-${lb}
+${lineBreak}
 
-${mdH2} ${mdLabels.acknowledgement}
+${heading2} ${mdLabels.acknowledgement}
 <!-- Acknowledgments -->
--
-${lb}
+${dash}
+${lineBreak}
 
-${mdH2} ${mdLabels.note}
+${heading2} ${mdLabels.note}
 <!-- Final Note -->
--
-${lb}
+${dash}
+${lineBreak}
 
-${mdH2} ${mdLabels.license}
+${heading2} ${mdLabels.license}
 ${data.license}
-${lb}
+${lineBreak}
 
 `;
 }
