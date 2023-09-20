@@ -4,13 +4,64 @@ const inq = require("inquirer");
 const fs = require("fs");
 const generateMarkdown = require("./utils/generateMarkdown");
 
-// #region Text the user will see
+// #region Get Dependencies
+//
+
+/**
+* Get Dependencies
+* @returns The list of dependencies from package.json
+*/
+let getDependencies = () =>
+{
+    console.info("[ getDependencies ] : called");
+
+    try
+    {
+        // Read the package.json file
+        const data = fs.readFileSync('./package.json', 'utf8');
+
+        // Parse content
+        const packageJson = JSON.parse(data);
+
+        // Get the dependencies and add it to an array
+        const dependencies = packageJson.dependencies;
+        const dependencyList = [];
+
+        // Iterate over the dependencies object
+        for (let dependency in dependencies)
+        {
+            // Get the dependency name and version
+            const dependencyName = dependency;
+            const dependencyVersion = dependencies[dependency];
+
+            // Create a string with the dependency name and version
+            const dependencyString = dependencyName + " required version: " + dependencyVersion;
+
+            // Add to the array
+            dependencyList.push(dependencyString);
+        }
+
+        // Return the dependency with the version needed
+        return dependencyList;
+    }
+    catch
+    {
+        console.error("There was an error in getting the dependencies from package.json.", "See the details below: ");
+        console.error(err);
+    }
+
+}; //  [ end : getDependencies ]
+
+//
+// #endregion Get Dependencies
+
+// #region Notes the user will see
 //
 const initNote = "Markdown Generator Started";
 const endNote = "Markdown Completed";
 
 //
-// #endregion Text the user will see
+// #endregion Notes the user will see
 
 // #region Questions
 //
@@ -31,7 +82,7 @@ const questions = [
     },
     {
         type: "input",
-        name: "dependencies",
+        name: "dependency_install",
         message: "To install dependencies what command can be used?",
         default: 'npm i',
     },
@@ -100,6 +151,9 @@ function writeToFile (fileName, data)
 // TODO: Create a function to initialize app
 function init ()
 {
+
+    const dependencies = getDependencies();
+
     console.log(initNote);
 
     inq.prompt(questions).then((answers) =>
@@ -110,7 +164,7 @@ function init ()
         // let testData = `
         // title - ${answers.title}
         // description - ${answers.description}
-        // dependancies - ${answers.dependancies}
+        // dependencies - ${answers.dependencies}
         // tests - ${answers.tests}
         // install - ${answers.install}
         // configs - ${answers.configs}
@@ -126,7 +180,7 @@ function init ()
         //
         // #endregion Test Log
 
-        writeToFile("README.md", generateMarkdown(answers));
+        writeToFile("README.md", generateMarkdown(answers, dependencies));
         console.log(endNote);
     }).catch((error) =>
     {

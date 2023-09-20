@@ -10,7 +10,10 @@ function renderLicenseLink (license) { }
 // If there is no license, return an empty string
 function renderLicenseSection (license) { }
 
-// Markdown Elements
+
+// #region Markdown Elements
+// 
+
 // Heading 
 const mdH1 = "#";
 const mdH2 = "##";
@@ -21,24 +24,32 @@ const dash = "-";
 //
 const lb = "---";
 
+//
+// #endregion Markdown Elements
+
+
+
+// The following is a template. 
+// I would not expect to type all of my instructions, notes, acknowledgements, etc. at the time of generation, however, those repetitive parts are auto-generated from the node CLI questions.
+
 /**
  * Markdown Elements showing how each part is expected to be used
- * @property {"toc"}             - Table of Contents
- * @property {"gettingStarted"}  - How to get started with the application
- * @property {"about"}           - About the application
- * @property {"builtWith"}       - What the application is built with
- * @property {"prereq"}          - What is needed to run the application
- * @property {"install"}         - How to install the application
- * @property {"config"}          - Notes about what may be configured
- * @property {"usage"}           - How to use the application
- * @property {"running"}         - How to run the application
- * @property {"testing"}         - How to test the various parts of the application
- * @property {"contrib"}         - How to contribute to the application
- * @property {"questions"}       - How one may contact the author for questions
- * @property {"author"}          - Who wrote the application
- * @property {"acknowledgement"} - Notes about who may have helped along the way
- * @property {"note"}            - Notes from the author
- * @property {"license"}         - License Used
+ * @property {string} toc             - Table of Contents
+ * @property {string} gettingStarted  - How to get started with the application
+ * @property {string} about           - About the application
+ * @property {string} builtWith       - What the application is built with
+ * @property {string} prereq          - What is needed to run the application
+ * @property {string} install         - How to install the application
+ * @property {string} config          - Notes about what may be configured
+ * @property {string} usage           - How to use the application
+ * @property {string} running         - How to run the application
+ * @property {string} testing         - How to test the various parts of the application
+ * @property {string} contrib         - How to contribute to the application
+ * @property {string} questions       - How one may contact the author for questions
+ * @property {string} author          - Who wrote the application
+ * @property {string} acknowledgement - Notes about who may have helped along the way
+ * @property {string} note            - Notes from the author
+ * @property {string} license         - License Used
  */
 const mdLabels = {
   "toc": "Table Of Contents",
@@ -61,62 +72,69 @@ const mdLabels = {
 };
 
 // TODO: Create a function to generate markdown for README
-function generateMarkdown (data)
+function generateMarkdown (data, dependencies)
 {
+  // List the Dependencies
+  const dependencyList = parseList(dependencies);
+
   return `
-  ${mdH1} ${data.title}
-  ${data.description}
-  ${lb} 
+${mdH1} ${data.title}
+${data.description}
+${lb} 
 
-  ${mdH2} ${mdLabels.toc}
+${mdH2} ${mdLabels.toc}
   <!-- TABLE OF CONTENTS -->
-  ${lb}
+${lb}
 
-  ${mdH2} ${mdLabels.about}
+${mdH2} ${mdLabels.about}
   <!-- About the Project -->
-  ${lb}
+${lb}
 
-  ${mdH3} ${mdLabels.built}
+${mdH3} ${mdLabels.built}
   <!-- Built With -->
-  ${lb}
+${lb}
 
-  ${mdH2} ${mdLabels.started}
+${mdH2} ${mdLabels.started}
   <!-- Getting Started  -->
-  ${lb}
+${lb}
 
-  ${mdH3} ${mdLabels.prereq}
-  ${data.dependencies}
-  ${lb}
+${mdH3} ${mdLabels.prereq}
+${data.dependency_install}
 
-  ${mdH3} ${mdLabels.install}
-  ${data.install}
-  ${lb}
+List of Required Dependencies and versions
+${dependencyList}
 
-  ${mdH2} ${mdLabels.usage}
+${lb}
+
+${mdH3} ${mdLabels.install}
+${data.install}
+${lb}
+
+${mdH2} ${mdLabels.usage}
   <!-- Usage -->
-  ${lb}
+${lb}
 
-  ${mdH3} ${mdLabels.config}
+${mdH3} ${mdLabels.config}
   <!-- Configurables -->
-  ${lb}
+${lb}
 
-  ${mdH2} ${mdLabels.running}
+${mdH2} ${mdLabels.running}
   <!-- Running -->
-  ${lb}
+${lb}
 
-  ${mdH2} ${mdLabels.testing}
-  ${data.tests}
-  ${lb}
+${mdH2} ${mdLabels.testing}
+${data.tests}
+${lb}
 
-  ${mdH2} ${mdLabels.contrib}
-  ${data.contribute}
-  ${lb}
+${mdH2} ${mdLabels.contrib}
+${data.contribute}
+${lb}
 
-  ${mdH2} ${mdLabels.author}
-  ${data.author}
-  ${lb}
+${mdH2} ${mdLabels.author}
+${data.author}
+${lb}
 
-  ${mdH2} ${mdLabels.questions}
+${mdH2} ${mdLabels.questions}
   If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
   (I do not use social media of any kind.)
 
@@ -124,21 +142,45 @@ function generateMarkdown (data)
     - You can find more of my work on my Github [${data.github}](https://github.com/${data.github}/)
     - Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
 
-  ${lb}
+${lb}
 
-  ${mdH2} ${mdLabels.acknowledgement}
+${mdH2} ${mdLabels.acknowledgement}
   <!-- Acknowledgments -->
-  ${lb}
+${lb}
 
-  ${mdH2} ${mdLabels.note}
+${mdH2} ${mdLabels.note}
   <!-- Final Note -->
-  ${lb}
+${lb}
 
-  ${mdH2} ${mdLabels.license}
-  ${data.license}
-  ${lb}
+${mdH2} ${mdLabels.license}
+${data.license}
+${lb}
 
 `;
 }
+
+/**
+* Parse a list of strings to get the values
+* @param {Array} list
+* @returns concatenated list of strings suited for markdown list
+*/
+let parseList = (list) =>
+{
+  console.info("[ parseList ] : called", list);
+
+  if (list)
+  {
+    let markdownList = "";
+
+    for (let listItem of list)
+    {
+      markdownList += "\t- " + listItem + "\n";
+    }
+
+    return markdownList;
+  }
+
+
+}; //  [ end : parseList ]
 
 module.exports = generateMarkdown;
