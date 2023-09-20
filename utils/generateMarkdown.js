@@ -117,9 +117,13 @@ function generateMarkdown (data)
   ${lb}
 
   ${mdH2} ${mdLabels.questions}
-  ${data.author_contact}
-  Email Address : ${data.author_email}
-  Github : ${data.author_github}
+  If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
+  (I do not use social media of any kind.)
+
+    - <a href="mailto:${data.email}">Send Me An Email</a> 
+    - You can find more of my work on my Github [${data.github}](https://github.com/${data.github}/)
+    - Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
+
   ${lb}
 
   ${mdH2} ${mdLabels.acknowledgement}
