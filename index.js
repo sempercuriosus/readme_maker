@@ -82,6 +82,11 @@ const questions = [
     },
     {
         type: "input",
+        name: "built_with",
+        message: "What was your application built with? \n\tEnter a ';' (semi-colon) with each new item you want to add.\n\tEG: Node.js; Python; etc;\n"
+    },
+    {
+        type: "input",
         name: "dependency_install",
         message: "To install dependencies what command can be used?",
         default: 'npm i',

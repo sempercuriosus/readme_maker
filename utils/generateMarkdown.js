@@ -55,7 +55,7 @@ const mdLabels = {
   "toc": "Table Of Contents",
   "gettingStarted": "Getting Started",
   "about": "About The Project",
-  "built": "Build With",
+  "built": "Built With",
   "started": "Getting Started",
   "prereq": "Prerequisites & Dependencies",
   "install": "Installation Notes",
@@ -75,10 +75,13 @@ const mdLabels = {
 function generateMarkdown (data, dependencies)
 {
   // List the Dependencies
-  const dependencyList = parseList(dependencies);
+  const dependencyList = parseDependencies(dependencies);
 
   // DO NOT MODIFY LAYOUT; ONLY CONTENT
   // note, this formatting below, albeit odd, is REQUIRED to stay as is for the ` formatted string.
+
+  // parse the tech used
+  const techStackUsed = parseTechStack(data.built_with);
 
   // add configs if needed
   let addConfigSection = "";
@@ -107,15 +110,17 @@ ${heading2} ${mdLabels.toc}
 ${lineBreak}
 
 ${heading2} ${mdLabels.about}
-<!-- About the Project -->
+<!-- About the Project - Full Description -->
+${dash}
 ${lineBreak}
 
 ${heading3} ${mdLabels.built}
-<!-- Built With -->
+${techStackUsed}
 ${lineBreak}
 
 ${heading2} ${mdLabels.started}
 <!-- Getting Started  -->
+${dash}
 ${lineBreak}
 
 ${heading3} ${mdLabels.prereq}
@@ -132,16 +137,18 @@ ${lineBreak}
 
 ${heading2} ${mdLabels.usage}
 <!-- Usage - What is needed to use the application? -->
+${dash}
 ${lineBreak}
 
 ${addConfigSection}
 
 ${heading2} ${mdLabels.running}
 <!-- Running - What is needed in running the application? -->
+${dash}
 ${lineBreak}
 
 ${heading2} ${mdLabels.testing}
-${data.tests}
+${dash} ${data.tests}
 ${lineBreak}
 
 ${heading2} ${mdLabels.contrib}
@@ -152,7 +159,7 @@ ${data.contribute}
 ${lineBreak}
 
 ${heading2} ${mdLabels.author}
-${data.author}
+${dash} ${data.author}
 ${lineBreak}
 
 ${heading2} ${mdLabels.questions}
@@ -182,7 +189,7 @@ ${lineBreak}
 `;
 }
 
-// #region Parse List
+// #region Parse Dependencies
 //
 
 /**
@@ -190,9 +197,9 @@ ${lineBreak}
 * @param {Array} list
 * @returns concatenated list of strings suited for markdown list
 */
-let parseList = (list) =>
+let parseDependencies = (list) =>
 {
-  console.info("[ parseList ] : called", list);
+  console.info("[ parseDependencies ] : called", list);
 
   if (list)
   {
@@ -200,16 +207,53 @@ let parseList = (list) =>
 
     for (let listItem of list)
     {
+      // see if I can loop the array, then join, then return
       markdownList += "\t- " + listItem + "\n";
     }
 
     return markdownList;
   }
-}; //  [ end : parseList ]
+}; //  [ end : parseDependencies ]
 
 
 //
-// #endregion Parse List
+// #endregion Parse Dependencies
 
+// #region Parse Technology Used
+//
+
+/**
+* Parse the technologies used to build your application
+* @param {string} list semi-colon delimited list
+* @returns concatenated list of strings suited for markdown list
+*/
+let parseTechStack = (list) =>
+{
+  console.info("[ parseTechStack ] : called");
+  if (list)
+  {
+    let techStack = [];
+    let updatedTechStack = "";
+    const prefix = "\t- ";
+    const suffix = "\n";
+    try
+    {
+      techStack = list.split(';');
+
+      // if the element is not populated with anything return null and add only those items with a value
+      updatedTechStack = techStack.map(element => element ? prefix + element.trim() + suffix : null).join("");
+
+      console.log(updatedTechStack);
+    }
+    catch {
+      console.error("There was an issue with parsing the list of items the application was built with.");
+    }
+    return updatedTechStack;
+  }
+
+}; //  [ end : parseTechStack ]
+
+//
+// #endregion Parse Technology Used
 
 module.exports = generateMarkdown;
