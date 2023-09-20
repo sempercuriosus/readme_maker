@@ -98,10 +98,10 @@ const questions = [
         message: "How can the user install the application?",
     },
     {
-        type: "list",
+        type: "confirm",
         name: "configs",
         message: "Are there user configurations?",
-        choices: ["false", "true"]
+        default: false
     },
     {
         type: "input",

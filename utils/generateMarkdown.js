@@ -77,6 +77,28 @@ function generateMarkdown (data, dependencies)
   // List the Dependencies
   const dependencyList = parseList(dependencies);
 
+  // DO NOT MODIFY LAYOUT; ONLY CONTENT
+  // note, this formatting below, albeit odd, is REQUIRED to stay as is for the ` formatted string.
+
+  // add configs if needed
+
+  let addConfigSection = "";
+
+  if (data.configs === true)
+  {
+    console.info("adding config section");
+    console.error(typeof lb, lb);
+    addConfigSection = mdH3
+      + " "
+      + mdLabels.config
+      + "\n"
+      + "<!-- Configurables -->"
+      + "\n"
+      + "\n"
+      + lb
+      ;
+  }
+
   return `
 ${mdH1} ${data.title}
 ${data.description}
@@ -87,15 +109,15 @@ ${mdH2} ${mdLabels.toc}
 ${lb}
 
 ${mdH2} ${mdLabels.about}
-  <!-- About the Project -->
+<!-- About the Project -->
 ${lb}
 
 ${mdH3} ${mdLabels.built}
-  <!-- Built With -->
+<!-- Built With -->
 ${lb}
 
 ${mdH2} ${mdLabels.started}
-  <!-- Getting Started  -->
+<!-- Getting Started  -->
 ${lb}
 
 ${mdH3} ${mdLabels.prereq}
@@ -111,15 +133,13 @@ ${data.install}
 ${lb}
 
 ${mdH2} ${mdLabels.usage}
-  <!-- Usage -->
+<!-- Usage -->
 ${lb}
 
-${mdH3} ${mdLabels.config}
-  <!-- Configurables -->
-${lb}
+${addConfigSection}
 
 ${mdH2} ${mdLabels.running}
-  <!-- Running -->
+<!-- Running -->
 ${lb}
 
 ${mdH2} ${mdLabels.testing}
@@ -145,11 +165,13 @@ ${mdH2} ${mdLabels.questions}
 ${lb}
 
 ${mdH2} ${mdLabels.acknowledgement}
-  <!-- Acknowledgments -->
+<!-- Acknowledgments -->
+-
 ${lb}
 
 ${mdH2} ${mdLabels.note}
-  <!-- Final Note -->
+<!-- Final Note -->
+-
 ${lb}
 
 ${mdH2} ${mdLabels.license}
@@ -158,6 +180,9 @@ ${lb}
 
 `;
 }
+
+// #region Parse List
+//
 
 /**
 * Parse a list of strings to get the values
@@ -179,8 +204,11 @@ let parseList = (list) =>
 
     return markdownList;
   }
-
-
 }; //  [ end : parseList ]
+
+
+//
+// #endregion Parse List
+
 
 module.exports = generateMarkdown;
