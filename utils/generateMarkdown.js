@@ -18,7 +18,8 @@ const mdH3 = "###";
 const mdH4 = "####";
 // List
 const dash = "-";
-
+//
+const lb = "---";
 
 /**
  * Markdown Elements showing how each part is expected to be used
@@ -43,7 +44,8 @@ const mdLabels = {
   "toc": "Table Of Contents",
   "gettingStarted": "Getting Started",
   "about": "About The Project",
-  "builtWith": "Build With",
+  "built": "Build With",
+  "started": "Getting Started",
   "prereq": "Prerequisites & Dependencies",
   "install": "Installation Notes",
   "config": "Configurables",
@@ -61,7 +63,76 @@ const mdLabels = {
 // TODO: Create a function to generate markdown for README
 function generateMarkdown (data)
 {
-  return `# ${data.title}
+  return `
+  ${mdH1} ${data.title}
+  ${data.description}
+  ${lb} 
+
+  ${mdH2} ${mdLabels.toc}
+  <!-- TABLE OF CONTENTS -->
+  ${lb}
+
+  ${mdH2} ${mdLabels.about}
+  <!-- About the Project -->
+  ${lb}
+
+  ${mdH3} ${mdLabels.built}
+  <!-- Built With -->
+  ${lb}
+
+  ${mdH2} ${mdLabels.started}
+  <!-- Getting Started  -->
+  ${lb}
+
+  ${mdH3} ${mdLabels.prereq}
+  ${data.dependencies}
+  ${lb}
+
+  ${mdH3} ${mdLabels.install}
+  ${data.install}
+  ${lb}
+
+  ${mdH2} ${mdLabels.usage}
+  <!-- Usage -->
+  ${lb}
+
+  ${mdH3} ${mdLabels.config}
+  <!-- Configurables -->
+  ${lb}
+
+  ${mdH2} ${mdLabels.running}
+  <!-- Running -->
+  ${lb}
+
+  ${mdH2} ${mdLabels.testing}
+  ${data.tests}
+  ${lb}
+
+  ${mdH2} ${mdLabels.contrib}
+  ${data.contribute}
+  ${lb}
+
+  ${mdH2} ${mdLabels.author}
+  ${data.author}
+  ${lb}
+
+  ${mdH2} ${mdLabels.questions}
+  ${data.author_contact}
+  Email Address : ${data.author_email}
+  Github : ${data.author_github}
+  ${lb}
+
+  ${mdH2} ${mdLabels.acknowledgement}
+  <!-- Acknowledgments -->
+  ${lb}
+
+  ${mdH2} ${mdLabels.note}
+  <!-- Final Note -->
+  ${lb}
+
+  ${mdH2} ${mdLabels.license}
+  ${data.license}
+  ${lb}
 
 `;
 }
