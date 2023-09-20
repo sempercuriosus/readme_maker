@@ -20,7 +20,7 @@ const heading2 = "##";
 const heading3 = "###";
 const heading4 = "####";
 // List
-const dash = "-";
+const dash = "- ";
 //
 const lineBreak = "---";
 
@@ -74,16 +74,26 @@ const mdLabels = {
 // TODO: Create a function to generate markdown for README
 function generateMarkdown (data, dependencies)
 {
-  // List the Dependencies
+
+  // #region List the Dependencies
+  //
+
   const dependencyList = parseDependencies(dependencies);
 
-  // DO NOT MODIFY LAYOUT; ONLY CONTENT
-  // note, this formatting below, albeit odd, is REQUIRED to stay as is for the ` formatted string.
+  //
+  // #endregion List the Dependencies
 
-  // parse the tech used
+  // #region Parse Tech Stack
+  //
+
   const techStackUsed = parseTechStack(data.built_with);
 
-  // add configs if needed
+  //
+  // #endregion Parse Tech Stack
+
+  // #region Add Config Section
+  //
+
   let addConfigSection = "";
 
   if (data.configs === true)
@@ -100,6 +110,11 @@ function generateMarkdown (data, dependencies)
       ;
   }
 
+  //
+  // #endregion Add Config Section
+
+  // DO NOT MODIFY LAYOUT; ONLY CONTENT
+  // note, this formatting below, albeit odd, is REQUIRED to stay as is for the ` formatted string all whitespace, tabs, cariage returns, etc. are all added in the string.
   return `
 ${heading1} ${data.title}
 ${data.description}
@@ -148,7 +163,7 @@ ${dash}
 ${lineBreak}
 
 ${heading2} ${mdLabels.testing}
-${dash} ${data.tests}
+${dash}${data.tests}
 ${lineBreak}
 
 ${heading2} ${mdLabels.contrib}
@@ -159,16 +174,16 @@ ${data.contribute}
 ${lineBreak}
 
 ${heading2} ${mdLabels.author}
-${dash} ${data.author}
+${dash}${data.author}
 ${lineBreak}
 
 ${heading2} ${mdLabels.questions}
 If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
 (I do not use social media of any kind.)
 
-  ${dash} <a href="mailto:${data.email}">Send Me An Email</a> 
-  ${dash} You can find more of my work on my Github [${data.github}](https://github.com/${data.github}/)
-  ${dash} Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
+  ${dash}<a href="mailto:${data.email}">Send Me An Email</a> 
+  ${dash}You can find more of my work on my Github [${data.github}](https://github.com/${data.github}/)
+  ${dash}Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
 
 ${lineBreak}
 
@@ -244,11 +259,15 @@ let parseTechStack = (list) =>
       updatedTechStack = techStack.map(element => element ? prefix + element.trim() + suffix : null).join("");
 
       console.log(updatedTechStack);
+      return updatedTechStack;
     }
     catch {
       console.error("There was an issue with parsing the list of items the application was built with.");
     }
-    return updatedTechStack;
+  }
+  else 
+  {
+    return dash;
   }
 
 }; //  [ end : parseTechStack ]
