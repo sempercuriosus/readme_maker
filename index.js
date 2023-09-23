@@ -121,11 +121,6 @@ const questions = [
         name: "author_github",
         message: "What is the author's Github username?"
     },
-    // {
-    //     type: "input",
-    //     name: "author_contact",
-    //     message: "How can the author be reached for questions?"
-    // },
     {
         type: "list",
         name: "license",
@@ -137,6 +132,12 @@ const questions = [
         name: "contribute",
         message: "What needs to be known so someone else contribute?"
     },
+    {
+        type: "confirm",
+        name: "deployed",
+        message: "Should there be a section about where the application is deployed?",
+        default: false
+    }
 ];
 
 

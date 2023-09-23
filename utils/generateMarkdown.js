@@ -1,4 +1,8 @@
 // TODO: Create a function that returns a license badge based on which license is passed in
+
+const { table } = require("console");
+const { read, readdir } = require("fs");
+
 // If there is no license, return an empty string
 function renderLicenseBadge (license) { }
 
@@ -20,14 +24,18 @@ const heading2 = "##";
 const heading3 = "###";
 const heading4 = "####";
 // List
-const dash = "- ";
-//
+const dash = "-";
+// Line Break
 const lineBreak = "---";
+// Code Sections
+const codeLine = "`";
+const codeBlock = "```";
 
 //
 // #endregion Markdown Elements
 
-
+const linkOpen = "";
+const linkClose = "";
 
 // The following is a template. 
 // I would not expect to type all of my instructions, notes, acknowledgements, etc. at the time of generation, however, those repetitive parts are auto-generated from the node CLI questions.
@@ -40,8 +48,9 @@ const lineBreak = "---";
  * @property {string} builtWith       - What the application is built with
  * @property {string} prereq          - What is needed to run the application
  * @property {string} install         - How to install the application
- * @property {string} config          - Notes about what may be configured
+ * @property {string} configs          - Notes about what may be configured
  * @property {string} usage           - How to use the application
+ * @property {string} deployed        - See the application in use
  * @property {string} running         - How to run the application
  * @property {string} testing         - How to test the various parts of the application
  * @property {string} contrib         - How to contribute to the application
@@ -51,200 +60,212 @@ const lineBreak = "---";
  * @property {string} note            - Notes from the author
  * @property {string} license         - License Used
  */
-const readmeSections = {
+let readmeSections = {
   "toc":
   {
     "label": "Table Of Contents"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "gettingStarted":
   {
     "label": "Getting Started"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "about":
   {
     "label": "About The Project"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "built":
   {
     "label": "Built With"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "started":
   {
     "label": "Getting Started"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "prereq":
   {
     "label": "Prerequisites & Dependencies"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "install":
   {
     "label": "Installation Notes"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
-  "config":
+  "configs":
   {
     "label": "Configurables"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "usage":
   {
     "label": "Usage"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
+  },
+  "deployed":
+  {
+    "label": "Deployement Location"
+    , "isEnabled": true
+    , "link": ""
   },
   "running":
   {
     "label": "Running The App"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "testing":
   {
     "label": "Testing"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "contrib":
   {
     "label": "How To Contribute"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "questions":
   {
     "label": "Questions"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "author":
   {
     "label": "Author Credit"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "acknowledgement":
   {
     "label": "Acknowledgments"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "note":
   {
     "label": "Final Note"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
   "license":
   {
     "label": "License"
-    , "include": true
+    , "isEnabled": true
+    , "link": ""
   },
 };
 
 // TODO: Create a function to generate markdown for README
 function generateMarkdown (data, dependencies)
 {
-
-  // #region List the Dependencies
+  // List the dependencies the project has in package.json
   //
-
   const dependencyList = parseDependencies(dependencies);
 
+  // Parse Tech Stack
   //
-  // #endregion List the Dependencies
-
-  // #region Parse Tech Stack
-  //
-
   const techStackUsed = parseTechStack(data.built_with);
 
+  // Should the config section be included?
   //
-  // #endregion Parse Tech Stack
+  const configSection = includeConfigSection(data.configs);
 
-  // #region Add Config Section
+  // Should there be a location to a deployed app?
   //
+  const deploySection = includeDeployedSection(data.deployed);
 
-  let addConfigSection = "";
-
-  if (data.configs === true)
-  {
-    addConfigSection = heading3
-      + " "
-      + readmeSections.config
-      + "\n"
-      + "<!-- Configurables -->"
-      + "\n"
-      + "\n"
-      + lineBreak
-      ;
-  }
-
+  // Generate the Table of Contents
   //
-  // #endregion Add Config Section
+  const tableOfConentsContent = makeTableOfContents();
 
   // DO NOT MODIFY LAYOUT; ONLY CONTENT
-  // note, this formatting below, albeit odd, is REQUIRED to stay as is for the ` formatted string all whitespace, tabs, cariage returns, etc. are all added in the string.
+  // note, this formatting below, albeit odd, is REQUIRED to stay as is for the ` formatted string. All whitespace, tabs, cariage returns, etc. are all added in the string.
   return `
-${heading1} ${data.title}
+${heading1} ${data.title} 
 ${data.description}
 ${lineBreak} 
 
 ${heading2} ${readmeSections.toc.label}
 <!-- TABLE OF CONTENTS -->
+${tableOfConentsContent}
 ${lineBreak}
 
-${heading2} ${readmeSections.about.label}
+${heading2} ${readmeSections.about.label}${readmeSections.about.link}
 <!-- About the Project - Full Description -->
 ${dash}
 ${lineBreak}
 
-${heading3} ${readmeSections.built.label}
+${heading3} ${readmeSections.built.label}${readmeSections.built.link}
 ${techStackUsed}
 ${lineBreak}
 
-${heading2} ${readmeSections.started.label}
+${heading2} ${readmeSections.started.label}${readmeSections.started.link}
 <!-- Getting Started  -->
 ${dash}
 ${lineBreak}
 
-${heading3} ${readmeSections.prereq.label}
-${data.dependency_install}
+${heading3} ${readmeSections.prereq.label}${readmeSections.prereq.link}
+To install the depenencies use the following command:
+${dash} ${codeLine}${data.dependency_install}${codeLine} 
 
 List of Required Dependencies and versions
 ${dependencyList}
-
 ${lineBreak}
 
-${heading3} ${readmeSections.install.label}
+To run the tests use the following command:
+${dash} ${codeLine}${data.tests}${codeLine}
+${lineBreak}
+
+${heading3} ${readmeSections.install.label}${readmeSections.install.link}
 ${data.install}
 ${lineBreak}
 
-${heading2} ${readmeSections.usage.label}
+${heading2} ${readmeSections.usage.label}${readmeSections.usage.link}
 <!-- Usage - What is needed to use the application? -->
 ${dash}
 ${lineBreak}
 
-${addConfigSection}
+${configSection}
 
-${heading2} ${readmeSections.running.label}
+${deploySection}
+
+${heading2} ${readmeSections.running.label}${readmeSections.running.link}
 <!-- Running - What is needed in running the application? -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.testing.label}
+${heading2} ${readmeSections.testing.label}${readmeSections.testing.link}
 ${dash}${data.tests}
 ${lineBreak}
 
-${heading2} ${readmeSections.contrib.label}
+${heading2} ${readmeSections.contrib.label}${readmeSections.contrib.link}
 If you would like to contribute to the application here is how you can do that. 
 Please, follow these guidelines below.
 
 ${data.contribute}
 ${lineBreak}
 
-${heading2} ${readmeSections.author.label}
+${heading2} ${readmeSections.author.label}${readmeSections.author.link}
 ${dash}${data.author}
 ${lineBreak}
 
-${heading2} ${readmeSections.questions.label}
+${heading2} ${readmeSections.questions.label}${readmeSections.questions.link}
 If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
 (I do not use social media of any kind.)
 
@@ -254,17 +275,17 @@ If you have any questions about the repo, open an issue, or would like to contac
 
 ${lineBreak}
 
-${heading2} ${readmeSections.acknowledgement.label}
+${heading2} ${readmeSections.acknowledgement.label}${readmeSections.acknowledgement.link}
 <!-- Acknowledgments -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.note.label}
+${heading2} ${readmeSections.note.label}${readmeSections.note.link}
 <!-- Final Note -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.license.label}
+${heading2} ${readmeSections.license.label}${readmeSections.license.link}
 ${data.license}
 ${lineBreak}
 
@@ -275,9 +296,9 @@ ${lineBreak}
 //
 
 /**
-* Parse a list of strings to get the values
+* Parse a list of strings to get the values from package.json
 * @param {Array} list
-* @returns concatenated list of strings suited for markdown list
+* @returns a markdown friendly concatenated list of strings
 */
 let parseDependencies = (list) =>
 {
@@ -295,7 +316,6 @@ let parseDependencies = (list) =>
   }
 }; //  [ end : parseDependencies ]
 
-
 //
 // #endregion Parse Dependencies
 
@@ -305,7 +325,7 @@ let parseDependencies = (list) =>
 /**
 * Parse the technologies used to build your application
 * @param {string} list semi-colon delimited list
-* @returns concatenated list of strings suited for markdown list
+* @returns a markdown friendly concatenated list of strings
 */
 let parseTechStack = (list) =>
 {
@@ -338,5 +358,117 @@ let parseTechStack = (list) =>
 
 //
 // #endregion Parse Technology Used
+
+
+// #region Generate TOC
+//
+
+/**
+* Generate the Table Of Contents Sections
+* @param {} 
+* @returns The isEnabled sections of the table of contents
+*/
+let makeTableOfContents = () =>
+{
+  console.info("[ makeTableOfContents ] : called");
+
+  let tableOfContents = [];
+
+  for (let section in readmeSections)
+  {
+    let linkTo = readmeSections[section].label.replaceAll(/[^a-zA-Z]+/g, "_");
+    const link = "<a href=\"" + linkTo + "\"></a>";
+    readmeSections[section].link = link;
+
+    if (readmeSections[section].isEnabled === true)
+    {
+      let contentItem = dash + " [" + readmeSections[section].label + "]" + "(" + linkTo + ")" + "\n";
+
+      tableOfContents.push(contentItem);
+    }
+  }
+
+  console.log(tableOfContents);
+
+  if (!tableOfContents)
+  {
+    return dash + "Table Of Contents";
+  }
+
+  return tableOfContents;
+}; //  [ end : makeTableOfContents ]
+
+//
+// #endregion Generate TOC
+
+// #region Deployed Section
+//
+
+/**
+* Returns a Deployment Section
+* @param {} deployed
+* @returns a markdown friendly section about deployments
+*/
+let includeDeployedSection = (deployed) =>
+{
+  let deployedSection = "";
+
+  if (deployed === true)
+  {
+    deployedSection = heading3
+      + " "
+      + readmeSections.deployed.label
+      + "\n"
+      + "<!-- Deployment Location -->"
+      + "\n"
+      + "\n"
+      + lineBreak
+      ;
+
+    return deployedSection;
+  }
+  else 
+  {
+    readmeSections.deployed.isEnabled = false;
+  }
+}; //  [ end : includeDeployed ]
+
+//
+// #endregion Deployed Section
+
+// #region Add Config Section
+//
+
+/**
+* Creates a configuration section
+* @returns a markdown friendly section for the configuration options
+*/
+let includeConfigSection = (configurations) =>
+{
+  let addConfigSection = "";
+
+  if (configurations === true)
+  {
+    addConfigSection = heading3
+      + " "
+      + readmeSections.configs.label
+      + "\n"
+      + "<!-- Configurables -->"
+      + "\n"
+      + "\n"
+      + lineBreak
+      ;
+  }
+  else 
+  {
+    readmeSections.configs.isEnabled = false;
+  }
+  return addConfigSection;
+
+}; //  [ end : addConfigSection ]
+
+//
+// #endregion Add Config Section
+
 
 module.exports = generateMarkdown;
