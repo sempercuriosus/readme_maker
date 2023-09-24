@@ -222,7 +222,7 @@ ${heading2} ${readmeSections.about.label}${readmeSections.about.linkToSection}
 ${dash}
 ${lineBreak}
 
-${licenseSection}${readmeSections.license.linkToSection}
+${licenseSection}
 
 ${heading3} ${readmeSections.built.label}${readmeSections.built.linkToSection}
 ${techStackUsed}
@@ -241,10 +241,6 @@ List of Required Dependencies and versions
 ${dependencyList}
 ${lineBreak}
 
-To run the tests use the following command:
-${dash} ${codeLine}${data.tests}${codeLine}
-${lineBreak}
-
 ${heading3} ${readmeSections.install.label}${readmeSections.install.linkToSection}
 ${data.install}
 ${lineBreak}
@@ -259,12 +255,13 @@ ${configSection}
 ${deploySection}
 
 ${heading2} ${readmeSections.running.label}${readmeSections.running.linkToSection}
-<!-- Running - What is needed in running the application? -->
+<!-- Running - What is needed to running the application? -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.testing.label}${readmeSections.testing.linkToSection}
-${dash} ${data.tests}
+${heading3} ${readmeSections.testing.label}${readmeSections.testing.linkToSection}
+To run the tests use the following command:
+${dash} ${codeLine}${data.tests}${codeLine}
 ${lineBreak}
 
 ${heading2} ${readmeSections.contrib.label}${readmeSections.contrib.linkToSection}
@@ -275,16 +272,16 @@ ${data.contribute}
 ${lineBreak}
 
 ${heading2} ${readmeSections.author.label}${readmeSections.author.linkToSection}
-${dash}${data.author}
+${dash} ${data.author}
 ${lineBreak}
 
 ${heading2} ${readmeSections.questions.label}${readmeSections.questions.linkToSection}
 If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
 (I do not use social media of any kind.)
 
-  ${dash}<a href="mailto:${data.author_email}">Send Me An Email</a> 
-  ${dash}You can find more of my work on my Github [${data.author_github}](https://github.com/${data.author_github}/)
-  ${dash}Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
+  ${dash} <a href="mailto:${data.author_email}">Send Me An Email</a>
+  ${dash} You can find more of my work on my Github [${data.author_github}](https://github.com/${data.author_github}/)
+  ${dash} Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
 
 ${lineBreak}
 
@@ -321,7 +318,7 @@ let parseDependencies = (list) =>
     for (let listItem of list)
     {
       // see if I can loop the array, then join, then return
-      markdownList += "\t- " + listItem + "\n";
+      markdownList += dash + " " + listItem + "\n";
     }
 
     return markdownList;
@@ -381,12 +378,10 @@ let parseTechStack = (list) =>
 */
 let createLink = (section) =>
 {
-  console.info("[ createLink ] : called");
-
   if (section)
   {
     const sectionName = section.replaceAll(/[^a-zA-Z]+/g, "_");
-    const sectionLink = "<a href=\"" + "#" + sectionName + "\"></a>";
+    const sectionLink = " " + "<a href=\"" + "#" + sectionName + "\"></a>";
 
     return sectionLink;
   }
@@ -407,22 +402,21 @@ let createLink = (section) =>
 */
 let makeTableOfContents = () =>
 {
-  let tableOfContents = [];
+  let tableOfContents = "";
 
   for (let section in readmeSections)
   {
-    let linkTo = createLink(readmeSections[section].label);
-    readmeSections[section].linkToSection = linkTo;
-
     if (readmeSections[section].isEnabled === true)
     {
-      let contentItem = dash + " [" + readmeSections[section].label + "]" + "(" + linkTo + ")" + "\n";
+      let linkTo = createLink(readmeSections[section].label);
+      readmeSections[section].linkToSection = linkTo;
 
-      tableOfContents.push(contentItem);
+      let contentItem = dash + " [" + readmeSections[section].label + "]" + "(" + linkTo + ")";
+      tableOfContents += contentItem + "\n";
     }
   }
 
-  if (!tableOfContents)
+  if (tableOfContents.length === 0)
   {
     return dash + "Table Of Contents";
   }
@@ -507,7 +501,6 @@ let includeConfigSection = (configurations) =>
 // #region License
 // Gets the components that are associate with the license and rendering that in the README.
 
-// TODO: Create a function that returns a license badge based on which license is passed in
 // If there is no license, return an empty string
 function renderLicenseBadge (license)
 {
@@ -520,14 +513,12 @@ function renderLicenseBadge (license)
   return "";
 }
 
-// TODO: Create a function that returns the license link
 // If there is no license, return an empty string
 function renderLicenseLink (license)
 {
-  // This is implemented in the makeTableOfContents() function
+  readmeSections.license.linkToSection = createLink(license);
 }
 
-// TODO: Create a function that returns the license section of README
 // If there is no license, return an empty string
 function renderLicenseSection (license)
 {
@@ -540,10 +531,11 @@ function renderLicenseSection (license)
   if (!license || license !== "None")
   {
     // getting the badge link 
-    let badgeLink = renderLicenseBadge(license);
+    const badgeLink = renderLicenseBadge(license);
+    renderLicenseLink(readmeSections.license.label);
     // const licenseLink = renderLicenseLink(license);
     // only if the license is not None or not empty, then return the user selected.
-    const licenseSection = heading2 + " " + readmeSections.license.label
+    const licenseSection = heading2 + " " + readmeSections.license.label + readmeSections.license.linkToSection
       + "\n"
       + "<!-- License -->"
       + "\n"

@@ -1,8 +1,8 @@
-// TODO: Include packages needed for this application
 // Needed Inquirer
 const inq = require("inquirer");
 const fs = require("fs");
 const generateMarkdown = require("./utils/generateMarkdown");
+const path = require('path');
 
 // #region Get Dependencies
 //
@@ -153,15 +153,12 @@ const questions = [
 //
 // #endregion Questions
 
-// TODO: Create a function to write README file
 function writeToFile (fileName, data)
 {
     // since we are going to 1. need to wait for answers to come in and 2. not doing a large write doing with the synchronous
-    console.log(process.cwd(), fileName);
-    fs.writeFileSync(process.cwd().concat(fileName), data);
+    fs.writeFileSync(path.join(process.cwd(), fileName), data);
 }
 
-// TODO: Create a function to initialize app
 function init ()
 {
 
