@@ -56,7 +56,7 @@ let getDependencies = () =>
 // #region Notes the user will see
 //
 const initNote = "Markdown Generator Started";
-const endNote = "Markdown Completed";
+const endNote = "Markdown Completed - Your README.md has been created!";
 
 //
 // #endregion Notes the user will see
@@ -192,7 +192,6 @@ function init ()
 
         //
         // #endregion Test Log
-
 
         writeToFile("README.md", generateMarkdown(answers, dependencies));
         console.log(endNote);

@@ -180,8 +180,6 @@ let readmeSections = {
 
 function generateMarkdown (data, dependencies)
 {
-  console.log(data);
-
   // List the dependencies the project has in package.json
   //
   const dependencyList = parseDependencies(dependencies);
@@ -224,7 +222,7 @@ ${heading2} ${readmeSections.about.label}${readmeSections.about.linkToSection}
 ${dash}
 ${lineBreak}
 
-${licenseSection}
+${licenseSection}${readmeSections.license.linkToSection}
 
 ${heading3} ${readmeSections.built.label}${readmeSections.built.linkToSection}
 ${techStackUsed}
@@ -373,6 +371,32 @@ let parseTechStack = (list) =>
 //
 // #endregion Parse Technology Used
 
+// #region Create Link 
+//
+
+/**
+* Make an anchor link to a section in the README
+* @param {} section is the section you want to link to
+* @returns link to "section"
+*/
+let createLink = (section) =>
+{
+  console.info("[ createLink ] : called");
+
+  if (section)
+  {
+    const sectionName = section.replaceAll(/[^a-zA-Z]+/g, "_");
+    const sectionLink = "<a href=\"" + "#" + sectionName + "\"></a>";
+
+    return sectionLink;
+  }
+  // return empty string if nothing
+  return "";
+}; //  [ end : createLink ]
+
+//
+// #endregion Create Link 
+
 // #region Generate TOC
 // create the table of contents dynamically based on user's input
 
@@ -383,19 +407,16 @@ let parseTechStack = (list) =>
 */
 let makeTableOfContents = () =>
 {
-  console.info("[ makeTableOfContents ] : called");
-
   let tableOfContents = [];
 
   for (let section in readmeSections)
   {
-    let linkTo = readmeSections[section].label.replaceAll(/[^a-zA-Z]+/g, "_");
-    const link = "<a href=\"" + linkTo + "\"></a>";
-    readmeSections[section].linkToSection = link;
+    let linkTo = createLink(readmeSections[section].label);
+    readmeSections[section].linkToSection = linkTo;
 
     if (readmeSections[section].isEnabled === true)
     {
-      let contentItem = dash + " [" + readmeSections[section].label + "]" + "(#" + linkTo + ")" + "\n";
+      let contentItem = dash + " [" + readmeSections[section].label + "]" + "(" + linkTo + ")" + "\n";
 
       tableOfContents.push(contentItem);
     }
@@ -441,7 +462,7 @@ let includeDeployedSection = (deployed) =>
   else 
   {
     readmeSections.deployed.isEnabled = false;
-    return null;
+    return "";
   }
 }; //  [ end : includeDeployed ]
 
@@ -493,7 +514,6 @@ function renderLicenseBadge (license)
   if (license)
   {
     const badgeLink = "![GitHub license](https://img.shields.io/badge/license-" + license + "-blue.svg)";
-
     return badgeLink;
   }
   // if there is nothing in license then return an empty string
@@ -502,14 +522,16 @@ function renderLicenseBadge (license)
 
 // TODO: Create a function that returns the license link
 // If there is no license, return an empty string
-// This is implemented in makeTableOfContents()
-function renderLicenseLink (license) { }
+function renderLicenseLink (license)
+{
+  // This is implemented in the makeTableOfContents() function
+}
 
 // TODO: Create a function that returns the license section of README
 // If there is no license, return an empty string
 function renderLicenseSection (license)
 {
-  if (license == "None")
+  if (license === "None")
   {
     // if the user selects none then disable the section
     readmeSections.license.isEnabled = false;
@@ -518,18 +540,20 @@ function renderLicenseSection (license)
   if (!license || license !== "None")
   {
     // getting the badge link 
-    const badgeLink = renderLicenseBadge();
+    let badgeLink = renderLicenseBadge(license);
+    // const licenseLink = renderLicenseLink(license);
     // only if the license is not None or not empty, then return the user selected.
     const licenseSection = heading2 + " " + readmeSections.license.label
       + "\n"
       + "<!-- License -->"
+      + "\n"
       + badgeLink
+      + "\n"
       + "\n"
       + license
       + "\n"
       + lineBreak
       ;
-
     return licenseSection;
   }
 
