@@ -1,6 +1,6 @@
 
-# TITLE 
-DESCRIPTION
+# Read Me Generator 
+This application will generate a readme file for you. 
 --- 
 
 ## Table Of Contents
@@ -8,7 +8,6 @@ DESCRIPTION
 * [Table Of Contents](#table-of-contents)
 * [Getting Started](#getting-started)
 * [About The Project](#about-the-project)
-* [License](#license)
 * [Built With](#built-with)
 * [Getting Started](#getting-started)
 * [Prerequisites And Dependencies](#prerequisites-and-dependencies)
@@ -29,14 +28,11 @@ DESCRIPTION
 -
 ---
 
-## License<a href="#License"></a>
-This project is licensed under the following license: GPL3
 
-![GitHub license](https://img.shields.io/badge/license-GPL3-blue.svg)
----
 
 ### Built With <a href="#built-with"></a>
--
+	- node.js
+
 ---
 
 ## Getting Started <a href="#getting-started"></a>
@@ -59,7 +55,7 @@ List of Required Dependencies and versions
 
 ### Installation Notes <a href="#installation-notes"></a>
 ```
-- 
+- The application can be installed by cloning the repo, making sure the needed components are installed, including node.js, and you should be good to go.
 ```
 ---
 
@@ -86,7 +82,7 @@ To run the tests use the following command:
 If you would like to contribute to the application here is how you can do that. 
 Please, follow these guidelines below:
 
-- 
+- There are no contribution guidelines at this time.
 ---
 
 ## Author Credit <a href="#author-credit"></a>
@@ -97,7 +93,7 @@ Please, follow these guidelines below:
 If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
 (I do not use social media of any kind.)
 
-  - <a href="mailto:EMAIL@HOST.COM">Send Me An Email</a>
+  - <a href="mailto:hulse@hey.com">Send Me An Email</a>
   - You can find more of my work on my [Github](https://github.com/sempercuriosus/)
   - Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
 
