@@ -1,20 +1,3 @@
-// TODO: Create a function that returns a license badge based on which license is passed in
-
-const { table } = require("console");
-const { read, readdir } = require("fs");
-
-// If there is no license, return an empty string
-function renderLicenseBadge (license) { }
-
-// TODO: Create a function that returns the license link
-// If there is no license, return an empty string
-function renderLicenseLink (license) { }
-
-// TODO: Create a function that returns the license section of README
-// If there is no license, return an empty string
-function renderLicenseSection (license) { }
-
-
 // #region Markdown Elements
 // 
 
@@ -34,8 +17,14 @@ const codeBlock = "```";
 //
 // #endregion Markdown Elements
 
-const linkOpen = "";
-const linkClose = "";
+// #region Imports
+//
+
+const { table } = require("console");
+const { read, readdir } = require("fs");
+
+//
+// #endregion Imports
 
 // The following is a template. 
 // I would not expect to type all of my instructions, notes, acknowledgements, etc. at the time of generation, however, those repetitive parts are auto-generated from the node CLI questions.
@@ -171,7 +160,45 @@ let readmeSections = {
   },
 };
 
-// TODO: Create a function to generate markdown for README
+// #region License
+//
+
+
+// TODO: Create a function that returns a license badge based on which license is passed in
+
+// If there is no license, return an empty string
+function renderLicenseBadge (license)
+{
+  if (!license || license !== "None")
+  {
+    // only if the license is not None or not empty, then return the user selected.
+
+    const licenseSection = 
+  }
+
+  return licenseSection;
+}
+
+// TODO: Create a function that returns the license link
+// If there is no license, return an empty string
+function renderLicenseLink (license) { }
+
+// TODO: Create a function that returns the license section of README
+// If there is no license, return an empty string
+function renderLicenseSection (license)
+{
+  if (license != "None")
+  {
+    const licenseSection = ``;
+  }
+}
+
+//
+// #endregion License
+
+// #region Make the Markdown
+//
+
 function generateMarkdown (data, dependencies)
 {
   // List the dependencies the project has in package.json
@@ -209,6 +236,10 @@ ${lineBreak}
 ${heading2} ${readmeSections.about.label}${readmeSections.about.link}
 <!-- About the Project - Full Description -->
 ${dash}
+${lineBreak}
+
+${heading2} ${readmeSections.license.label}${readmeSections.license.link}
+${data.license}
 ${lineBreak}
 
 ${heading3} ${readmeSections.built.label}${readmeSections.built.link}
@@ -285,12 +316,11 @@ ${heading2} ${readmeSections.note.label}${readmeSections.note.link}
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.license.label}${readmeSections.license.link}
-${data.license}
-${lineBreak}
-
 `;
 }
+
+//
+// #endregion Make the Markdown
 
 // #region Parse Dependencies
 //
@@ -359,9 +389,8 @@ let parseTechStack = (list) =>
 //
 // #endregion Parse Technology Used
 
-
 // #region Generate TOC
-//
+// create the table of contents dynamically based on user's input
 
 /**
 * Generate the Table Of Contents Sections
@@ -402,7 +431,7 @@ let makeTableOfContents = () =>
 // #endregion Generate TOC
 
 // #region Deployed Section
-//
+// includes a section of where the application is deployed, if the user desires such a section.
 
 /**
 * Returns a Deployment Section
@@ -437,7 +466,7 @@ let includeDeployedSection = (deployed) =>
 // #endregion Deployed Section
 
 // #region Add Config Section
-//
+// includes a section of where the application's configurations should be, if the user desires such a section.
 
 /**
 * Creates a configuration section
@@ -469,6 +498,5 @@ let includeConfigSection = (configurations) =>
 
 //
 // #endregion Add Config Section
-
 
 module.exports = generateMarkdown;
