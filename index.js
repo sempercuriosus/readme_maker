@@ -132,7 +132,7 @@ const questions = [
         type: "list",
         name: "license",
         message: "What License do you want to use?",
-        choices: ["MIT", "APACHE 2.0", "GPL 3.0", "BSD 3", "None"],
+        choices: ["MIT", "APACHE2", "GPL3", "BSD3", "None"],
         default: "None",
     },
     {

@@ -10,9 +10,6 @@ const heading4 = "####";
 const dash = "-";
 // Line Break
 const lineBreak = "---";
-// Code Sections
-const codeLine = "`";
-const codeBlock = "```";
 
 //
 // #endregion Markdown Elements
@@ -94,7 +91,7 @@ let readmeSections = {
   },
   "prereq":
   {
-    "label": "Prerequisites & Dependencies"
+    "label": "Prerequisites And Dependencies"
     , "isEnabled": true
     , "linkToSection": ""
   },
@@ -217,35 +214,39 @@ ${heading2} ${readmeSections.toc.label}
 ${tableOfConentsContent}
 ${lineBreak}
 
-${heading2} ${readmeSections.about.label}${readmeSections.about.linkToSection}
+${heading2} ${readmeSections.about.label} ${readmeSections.about.linkToSection}
 <!-- About the Project - Full Description -->
 ${dash}
 ${lineBreak}
 
 ${licenseSection}
 
-${heading3} ${readmeSections.built.label}${readmeSections.built.linkToSection}
+${heading3} ${readmeSections.built.label} ${readmeSections.built.linkToSection}
 ${techStackUsed}
 ${lineBreak}
 
-${heading2} ${readmeSections.started.label}${readmeSections.started.linkToSection}
+${heading2} ${readmeSections.started.label} ${readmeSections.started.linkToSection}
 <!-- Getting Started  -->
 ${dash}
 ${lineBreak}
 
-${heading3} ${readmeSections.prereq.label}${readmeSections.prereq.linkToSection}
+${heading3} ${readmeSections.prereq.label} ${readmeSections.prereq.linkToSection}
 To install the depenencies use the following command:
-${dash} ${codeLine}${data.dependency_install}${codeLine} 
+\`\`\`
+${dash} ${data.dependency_install}
+\`\`\`
 
 List of Required Dependencies and versions
 ${dependencyList}
 ${lineBreak}
 
-${heading3} ${readmeSections.install.label}${readmeSections.install.linkToSection}
-${data.install}
+${heading3} ${readmeSections.install.label} ${readmeSections.install.linkToSection}
+\`\`\`
+${dash} ${data.install}
+\`\`\`
 ${lineBreak}
 
-${heading2} ${readmeSections.usage.label}${readmeSections.usage.linkToSection}
+${heading2} ${readmeSections.usage.label} ${readmeSections.usage.linkToSection}
 <!-- Usage - What is needed to use the application? -->
 ${dash}
 ${lineBreak}
@@ -254,43 +255,43 @@ ${configSection}
 
 ${deploySection}
 
-${heading2} ${readmeSections.running.label}${readmeSections.running.linkToSection}
+${heading2} ${readmeSections.running.label} ${readmeSections.running.linkToSection}
 <!-- Running - What is needed to running the application? -->
 ${dash}
 ${lineBreak}
 
-${heading3} ${readmeSections.testing.label}${readmeSections.testing.linkToSection}
+${heading3} ${readmeSections.testing.label} ${readmeSections.testing.linkToSection}
 To run the tests use the following command:
-${dash} ${codeLine}${data.tests}${codeLine}
+${dash} ${data.tests}
 ${lineBreak}
 
-${heading2} ${readmeSections.contrib.label}${readmeSections.contrib.linkToSection}
+${heading2} ${readmeSections.contrib.label} ${readmeSections.contrib.linkToSection}
 If you would like to contribute to the application here is how you can do that. 
-
 Please, follow these guidelines below:
-${data.contribute}
+
+${dash} ${data.contribute}
 ${lineBreak}
 
-${heading2} ${readmeSections.author.label}${readmeSections.author.linkToSection}
+${heading2} ${readmeSections.author.label} ${readmeSections.author.linkToSection}
 ${dash} ${data.author}
 ${lineBreak}
 
-${heading2} ${readmeSections.questions.label}${readmeSections.questions.linkToSection}
+${heading2} ${readmeSections.questions.label} ${readmeSections.questions.linkToSection}
 If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
 (I do not use social media of any kind.)
 
   ${dash} <a href="mailto:${data.author_email}">Send Me An Email</a>
-  ${dash} You can find more of my work on my Github [${data.author_github}](https://github.com/${data.author_github}/)
+  ${dash} You can find more of my work on my [Github](https://github.com/${data.author_github}/)
   ${dash} Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
 
 ${lineBreak}
 
-${heading2} ${readmeSections.acknowledgement.label}${readmeSections.acknowledgement.linkToSection}
+${heading2} ${readmeSections.acknowledgement.label} ${readmeSections.acknowledgement.linkToSection}
 <!-- Acknowledgments -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.note.label}${readmeSections.note.linkToSection}
+${heading2} ${readmeSections.note.label} ${readmeSections.note.linkToSection}
 <!-- Final Note -->
 ${dash}
 ${lineBreak}
@@ -380,8 +381,7 @@ let createLink = (section) =>
 {
   if (section)
   {
-    const sectionName = section.replaceAll(/[^a-zA-Z]+/g, "_");
-    const sectionLink = " " + "<a href=\"" + "#" + sectionName + "\"></a>";
+    const sectionLink = "<a href=\"" + "#" + section + "\"></a>";
 
     return sectionLink;
   }
@@ -408,10 +408,13 @@ let makeTableOfContents = () =>
   {
     if (readmeSections[section].isEnabled === true)
     {
-      let linkTo = createLink(readmeSections[section].label);
+      let sectionName = readmeSections[section].label.replaceAll(/[^a-zA-Z]+/g, "-");
+      sectionName = sectionName.toLowerCase();
+
+      let linkTo = createLink(sectionName);
       readmeSections[section].linkToSection = linkTo;
 
-      let contentItem = dash + " [" + readmeSections[section].label + "]" + "(" + linkTo + ")";
+      let contentItem = "*" + " " + "[" + readmeSections[section].label + "]" + "(" + "#" + sectionName + ")";
       tableOfContents += contentItem + "\n";
     }
   }
@@ -537,12 +540,10 @@ function renderLicenseSection (license)
     // only if the license is not None or not empty, then return the user selected.
     const licenseSection = heading2 + " " + readmeSections.license.label + readmeSections.license.linkToSection
       + "\n"
-      + "<!-- License -->"
+      + "This project is licensed under the following license: " + license
+      + "\n"
       + "\n"
       + badgeLink
-      + "\n"
-      + "\n"
-      + license
       + "\n"
       + lineBreak
       ;
