@@ -29,6 +29,13 @@ const { read, readdir } = require("fs");
 // The following is a template. 
 // I would not expect to type all of my instructions, notes, acknowledgements, etc. at the time of generation, however, those repetitive parts are auto-generated from the node CLI questions.
 
+// #region 
+// This is where each of the markdown sections can be enabled/disabled depending on user actions. 
+// As of 24 Sept, 2023, not all the sections are configurable, HOWEVER, in the readmeSections object they _can_ are set up to work that way.
+
+// #region PARAM LIST
+//
+
 /**
  * Markdown Elements showing how each part is expected to be used
  * @property {string} toc             - Table of Contents
@@ -49,155 +56,127 @@ const { read, readdir } = require("fs");
  * @property {string} note            - Notes from the author
  * @property {string} license         - License Used
  */
+
+//
+// #endregion PARAM LIST
 let readmeSections = {
   "toc":
   {
     "label": "Table Of Contents"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "gettingStarted":
   {
     "label": "Getting Started"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "about":
   {
     "label": "About The Project"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "built":
   {
     "label": "Built With"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "started":
   {
     "label": "Getting Started"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "prereq":
   {
     "label": "Prerequisites & Dependencies"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "install":
   {
     "label": "Installation Notes"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "configs":
   {
     "label": "Configurables"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "usage":
   {
     "label": "Usage"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "deployed":
   {
     "label": "Deployement Location"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "running":
   {
     "label": "Running The App"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "testing":
   {
     "label": "Testing"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "contrib":
   {
     "label": "How To Contribute"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "questions":
   {
     "label": "Questions"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "author":
   {
     "label": "Author Credit"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "acknowledgement":
   {
     "label": "Acknowledgments"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "note":
   {
     "label": "Final Note"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
   "license":
   {
     "label": "License"
     , "isEnabled": true
-    , "link": ""
+    , "linkToSection": ""
   },
 };
 
-// #region License
-//
-
-
-// TODO: Create a function that returns a license badge based on which license is passed in
-
-// If there is no license, return an empty string
-function renderLicenseBadge (license)
-{
-  if (!license || license !== "None")
-  {
-    // only if the license is not None or not empty, then return the user selected.
-
-    const licenseSection = 
-  }
-
-  return licenseSection;
-}
-
-// TODO: Create a function that returns the license link
-// If there is no license, return an empty string
-function renderLicenseLink (license) { }
-
-// TODO: Create a function that returns the license section of README
-// If there is no license, return an empty string
-function renderLicenseSection (license)
-{
-  if (license != "None")
-  {
-    const licenseSection = ``;
-  }
-}
 
 //
-// #endregion License
+// #endregion 
+
 
 // #region Make the Markdown
-//
+// This is where the bulk of the work is done creating the actual markdown output for the README file.
 
 function generateMarkdown (data, dependencies)
 {
@@ -233,25 +212,25 @@ ${heading2} ${readmeSections.toc.label}
 ${tableOfConentsContent}
 ${lineBreak}
 
-${heading2} ${readmeSections.about.label}${readmeSections.about.link}
+${heading2} ${readmeSections.about.label}${readmeSections.about.linkToSection}
 <!-- About the Project - Full Description -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.license.label}${readmeSections.license.link}
+${heading2} ${readmeSections.license.label}${readmeSections.license.linkToSection}
 ${data.license}
 ${lineBreak}
 
-${heading3} ${readmeSections.built.label}${readmeSections.built.link}
+${heading3} ${readmeSections.built.label}${readmeSections.built.linkToSection}
 ${techStackUsed}
 ${lineBreak}
 
-${heading2} ${readmeSections.started.label}${readmeSections.started.link}
+${heading2} ${readmeSections.started.label}${readmeSections.started.linkToSection}
 <!-- Getting Started  -->
 ${dash}
 ${lineBreak}
 
-${heading3} ${readmeSections.prereq.label}${readmeSections.prereq.link}
+${heading3} ${readmeSections.prereq.label}${readmeSections.prereq.linkToSection}
 To install the depenencies use the following command:
 ${dash} ${codeLine}${data.dependency_install}${codeLine} 
 
@@ -263,11 +242,11 @@ To run the tests use the following command:
 ${dash} ${codeLine}${data.tests}${codeLine}
 ${lineBreak}
 
-${heading3} ${readmeSections.install.label}${readmeSections.install.link}
+${heading3} ${readmeSections.install.label}${readmeSections.install.linkToSection}
 ${data.install}
 ${lineBreak}
 
-${heading2} ${readmeSections.usage.label}${readmeSections.usage.link}
+${heading2} ${readmeSections.usage.label}${readmeSections.usage.linkToSection}
 <!-- Usage - What is needed to use the application? -->
 ${dash}
 ${lineBreak}
@@ -276,27 +255,27 @@ ${configSection}
 
 ${deploySection}
 
-${heading2} ${readmeSections.running.label}${readmeSections.running.link}
+${heading2} ${readmeSections.running.label}${readmeSections.running.linkToSection}
 <!-- Running - What is needed in running the application? -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.testing.label}${readmeSections.testing.link}
+${heading2} ${readmeSections.testing.label}${readmeSections.testing.linkToSection}
 ${dash}${data.tests}
 ${lineBreak}
 
-${heading2} ${readmeSections.contrib.label}${readmeSections.contrib.link}
+${heading2} ${readmeSections.contrib.label}${readmeSections.contrib.linkToSection}
 If you would like to contribute to the application here is how you can do that. 
 Please, follow these guidelines below.
 
 ${data.contribute}
 ${lineBreak}
 
-${heading2} ${readmeSections.author.label}${readmeSections.author.link}
+${heading2} ${readmeSections.author.label}${readmeSections.author.linkToSection}
 ${dash}${data.author}
 ${lineBreak}
 
-${heading2} ${readmeSections.questions.label}${readmeSections.questions.link}
+${heading2} ${readmeSections.questions.label}${readmeSections.questions.linkToSection}
 If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
 (I do not use social media of any kind.)
 
@@ -306,12 +285,12 @@ If you have any questions about the repo, open an issue, or would like to contac
 
 ${lineBreak}
 
-${heading2} ${readmeSections.acknowledgement.label}${readmeSections.acknowledgement.link}
+${heading2} ${readmeSections.acknowledgement.label}${readmeSections.acknowledgement.linkToSection}
 <!-- Acknowledgments -->
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.note.label}${readmeSections.note.link}
+${heading2} ${readmeSections.note.label}${readmeSections.note.linkToSection}
 <!-- Final Note -->
 ${dash}
 ${lineBreak}
@@ -407,7 +386,7 @@ let makeTableOfContents = () =>
   {
     let linkTo = readmeSections[section].label.replaceAll(/[^a-zA-Z]+/g, "_");
     const link = "<a href=\"" + linkTo + "\"></a>";
-    readmeSections[section].link = link;
+    readmeSections[section].linkToSection = link;
 
     if (readmeSections[section].isEnabled === true)
     {
@@ -498,5 +477,41 @@ let includeConfigSection = (configurations) =>
 
 //
 // #endregion Add Config Section
+
+// #region License
+//
+
+
+// TODO: Create a function that returns a license badge based on which license is passed in
+
+// If there is no license, return an empty string
+function renderLicenseBadge (license)
+{
+  if (!license || license !== "None")
+  {
+    // only if the license is not None or not empty, then return the user selected.
+
+    const licenseSection = "";
+  }
+
+  return licenseSection;
+}
+
+// TODO: Create a function that returns the license link
+// If there is no license, return an empty string
+function renderLicenseLink (license) { }
+
+// TODO: Create a function that returns the license section of README
+// If there is no license, return an empty string
+function renderLicenseSection (license)
+{
+  if (license != "None")
+  {
+    const licenseSection = ``;
+  }
+}
+
+//
+// #endregion License
 
 module.exports = generateMarkdown;
