@@ -1,8 +1,8 @@
-// TODO: Include packages needed for this application
 // Needed Inquirer
 const inq = require("inquirer");
 const fs = require("fs");
 const generateMarkdown = require("./utils/generateMarkdown");
+const path = require('path');
 
 // #region Get Dependencies
 //
@@ -13,8 +13,6 @@ const generateMarkdown = require("./utils/generateMarkdown");
 */
 let getDependencies = () =>
 {
-    console.info("[ getDependencies ] : called");
-
     try
     {
         // Read the package.json file
@@ -58,7 +56,7 @@ let getDependencies = () =>
 // #region Notes the user will see
 //
 const initNote = "Markdown Generator Started";
-const endNote = "Markdown Completed";
+const endNote = "Markdown Completed - Your README.md has been created!";
 
 //
 // #endregion Notes the user will see
@@ -73,12 +71,20 @@ const questions = [
     {
         type: "input",
         name: "title",
-        message: "What is the README Title?"
+        message: "What is the Title you want to use for the README?",
+        default: "TITLE",
     },
     {
         type: "input",
         name: "description",
-        message: "What is the application's purpose? Enter in a brief description."
+        message: "Enter in a brief description about the application and the purpose it has.",
+        default: "DESCRIPTION",
+    },
+    {
+        type: "input",
+        name: "built_with",
+        message: "What was your application built with? \n\tEnter a ';' (semi-colon) with each new item you want to add.\n\tEG: Node.js; Python; etc;\n",
+        default: "",
     },
     {
         type: "input",
@@ -96,59 +102,63 @@ const questions = [
         type: "input",
         name: "install",
         message: "How can the user install the application?",
+        default: "",
     },
     {
-        type: "list",
+        type: "confirm",
         name: "configs",
         message: "Are there user configurations?",
-        choices: ["false", "true"]
+        default: false
     },
     {
         type: "input",
         name: "author",
-        message: "Who wrote this application?"
+        message: "Who wrote this application?",
+        default: "Eric Hulse",
     },
     {
         type: "input",
         name: "author_email",
-        message: "What is the author's email address?"
+        message: "What is the author's email address?",
+        default: "EMAIL@HOST.COM",
     },
     {
         type: "input",
         name: "author_github",
-        message: "What is the author's Github username?"
-    },
-    {
-        type: "input",
-        name: "author_contact",
-        message: "How can the author be reached for questions?"
+        message: "What is the author's Github username?",
+        default: "sempercuriosus",
     },
     {
         type: "list",
         name: "license",
         message: "What License do you want to use?",
-        choices: ["MIT", "APACHE 2.0", "GPL 3.0", "BSD 3", "None"],
+        choices: ["MIT", "APACHE2", "GPL3", "BSD3", "None"],
+        default: "None",
     },
     {
         type: "input",
         name: "contribute",
-        message: "What needs to be known so someone else contribute?"
+        message: "What needs to be known so someone else contribute?",
+        default: "",
     },
+    {
+        type: "confirm",
+        name: "deployed",
+        message: "Should there be a section about where the application is deployed?",
+        default: false
+    }
 ];
 
 
 //
 // #endregion Questions
 
-// TODO: Create a function to write README file
 function writeToFile (fileName, data)
 {
     // since we are going to 1. need to wait for answers to come in and 2. not doing a large write doing with the synchronous
-    console.log(process.cwd(), fileName);
-    fs.writeFileSync(process.cwd().concat(fileName), data);
+    fs.writeFileSync(path.join(process.cwd(), fileName), data);
 }
 
-// TODO: Create a function to initialize app
 function init ()
 {
 
