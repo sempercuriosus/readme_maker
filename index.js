@@ -71,17 +71,20 @@ const questions = [
     {
         type: "input",
         name: "title",
-        message: "What is the Title you want to use for the README?"
+        message: "What is the Title you want to use for the README?",
+        default: "TITLE",
     },
     {
         type: "input",
         name: "description",
-        message: "Enter in a brief description about the application and the purpose it has."
+        message: "Enter in a brief description about the application and the purpose it has.",
+        default: "DESCRIPTION",
     },
     {
         type: "input",
         name: "built_with",
-        message: "What was your application built with? \n\tEnter a ';' (semi-colon) with each new item you want to add.\n\tEG: Node.js; Python; etc;\n"
+        message: "What was your application built with? \n\tEnter a ';' (semi-colon) with each new item you want to add.\n\tEG: Node.js; Python; etc;\n",
+        default: "",
     },
     {
         type: "input",
@@ -99,6 +102,7 @@ const questions = [
         type: "input",
         name: "install",
         message: "How can the user install the application?",
+        default: "",
     },
     {
         type: "confirm",
@@ -109,28 +113,33 @@ const questions = [
     {
         type: "input",
         name: "author",
-        message: "Who wrote this application?"
+        message: "Who wrote this application?",
+        default: "Eric Hulse",
     },
     {
         type: "input",
         name: "author_email",
-        message: "What is the author's email address?"
+        message: "What is the author's email address?",
+        default: "EMAIL@HOST.COM",
     },
     {
         type: "input",
         name: "author_github",
-        message: "What is the author's Github username?"
+        message: "What is the author's Github username?",
+        default: "sempercuriosus",
     },
     {
         type: "list",
         name: "license",
         message: "What License do you want to use?",
         choices: ["MIT", "APACHE 2.0", "GPL 3.0", "BSD 3", "None"],
+        default: "None",
     },
     {
         type: "input",
         name: "contribute",
-        message: "What needs to be known so someone else contribute?"
+        message: "What needs to be known so someone else contribute?",
+        default: "",
     },
     {
         type: "confirm",
@@ -183,6 +192,7 @@ function init ()
 
         //
         // #endregion Test Log
+
 
         writeToFile("README.md", generateMarkdown(answers, dependencies));
         console.log(endNote);

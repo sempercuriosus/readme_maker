@@ -26,16 +26,12 @@ const { read, readdir } = require("fs");
 //
 // #endregion Imports
 
-// The following is a template. 
-// I would not expect to type all of my instructions, notes, acknowledgements, etc. at the time of generation, however, those repetitive parts are auto-generated from the node CLI questions.
-
-// #region 
+// #region readmeSections
 // This is where each of the markdown sections can be enabled/disabled depending on user actions. 
 // As of 24 Sept, 2023, not all the sections are configurable, HOWEVER, in the readmeSections object they _can_ are set up to work that way.
 
 // #region PARAM LIST
 //
-
 /**
  * Markdown Elements showing how each part is expected to be used
  * @property {string} toc             - Table of Contents
@@ -75,6 +71,12 @@ let readmeSections = {
   "about":
   {
     "label": "About The Project"
+    , "isEnabled": true
+    , "linkToSection": ""
+  },
+  "license":
+  {
+    "label": "License"
     , "isEnabled": true
     , "linkToSection": ""
   },
@@ -162,24 +164,24 @@ let readmeSections = {
     , "isEnabled": true
     , "linkToSection": ""
   },
-  "license":
-  {
-    "label": "License"
-    , "isEnabled": true
-    , "linkToSection": ""
-  },
 };
 
 
-//
-// #endregion 
 
+
+//
+// #endregion readmeSections
 
 // #region Make the Markdown
 // This is where the bulk of the work is done creating the actual markdown output for the README file.
+//
+// What is made is a template with added content from the user. 
+// I am not expecting that the developer making a README will sit and try to type and format all of their instructions, notes, acknowledgements, etc. using the command line at the time of README generation, however, there are parts that this is suited for and can be included immediately.
 
 function generateMarkdown (data, dependencies)
 {
+  console.log(data);
+
   // List the dependencies the project has in package.json
   //
   const dependencyList = parseDependencies(dependencies);
@@ -196,12 +198,17 @@ function generateMarkdown (data, dependencies)
   //
   const deploySection = includeDeployedSection(data.deployed);
 
+  // What License Should Be Included?
+  //
+  const licenseSection = renderLicenseSection(data.license);
+
   // Generate the Table of Contents
   //
   const tableOfConentsContent = makeTableOfContents();
 
   // DO NOT MODIFY LAYOUT; ONLY CONTENT
-  // note, this formatting below, albeit odd, is REQUIRED to stay as is for the ` formatted string. All whitespace, tabs, cariage returns, etc. are all added in the string.
+  // note the formatting below, albeit odd, this is REQUIRED to stay as is for the ` formatted string. 
+  // All whitespace, tabs, cariage returns, etc. are all added into the string and will be included in the output of the README document.
   return `
 ${heading1} ${data.title} 
 ${data.description}
@@ -217,9 +224,7 @@ ${heading2} ${readmeSections.about.label}${readmeSections.about.linkToSection}
 ${dash}
 ${lineBreak}
 
-${heading2} ${readmeSections.license.label}${readmeSections.license.linkToSection}
-${data.license}
-${lineBreak}
+${licenseSection}
 
 ${heading3} ${readmeSections.built.label}${readmeSections.built.linkToSection}
 ${techStackUsed}
@@ -261,13 +266,13 @@ ${dash}
 ${lineBreak}
 
 ${heading2} ${readmeSections.testing.label}${readmeSections.testing.linkToSection}
-${dash}${data.tests}
+${dash} ${data.tests}
 ${lineBreak}
 
 ${heading2} ${readmeSections.contrib.label}${readmeSections.contrib.linkToSection}
 If you would like to contribute to the application here is how you can do that. 
-Please, follow these guidelines below.
 
+Please, follow these guidelines below:
 ${data.contribute}
 ${lineBreak}
 
@@ -279,8 +284,8 @@ ${heading2} ${readmeSections.questions.label}${readmeSections.questions.linkToSe
 If you have any questions about the repo, open an issue, or would like to contact me directly here is where I can be found.
 (I do not use social media of any kind.)
 
-  ${dash}<a href="mailto:${data.email}">Send Me An Email</a> 
-  ${dash}You can find more of my work on my Github [${data.github}](https://github.com/${data.github}/)
+  ${dash}<a href="mailto:${data.author_email}">Send Me An Email</a> 
+  ${dash}You can find more of my work on my Github [${data.author_github}](https://github.com/${data.author_github}/)
   ${dash}Here is my <a href="https://sempercuriosus.github.io/PortfolioChallenge/">Personal Webpage</a>
 
 ${lineBreak}
@@ -390,13 +395,11 @@ let makeTableOfContents = () =>
 
     if (readmeSections[section].isEnabled === true)
     {
-      let contentItem = dash + " [" + readmeSections[section].label + "]" + "(" + linkTo + ")" + "\n";
+      let contentItem = dash + " [" + readmeSections[section].label + "]" + "(#" + linkTo + ")" + "\n";
 
       tableOfContents.push(contentItem);
     }
   }
-
-  console.log(tableOfContents);
 
   if (!tableOfContents)
   {
@@ -438,6 +441,7 @@ let includeDeployedSection = (deployed) =>
   else 
   {
     readmeSections.deployed.isEnabled = false;
+    return null;
   }
 }; //  [ end : includeDeployed ]
 
@@ -454,6 +458,7 @@ let includeDeployedSection = (deployed) =>
 let includeConfigSection = (configurations) =>
 {
   let addConfigSection = "";
+
 
   if (configurations === true)
   {
@@ -479,36 +484,57 @@ let includeConfigSection = (configurations) =>
 // #endregion Add Config Section
 
 // #region License
-//
-
+// Gets the components that are associate with the license and rendering that in the README.
 
 // TODO: Create a function that returns a license badge based on which license is passed in
-
 // If there is no license, return an empty string
 function renderLicenseBadge (license)
 {
-  if (!license || license !== "None")
+  if (license)
   {
-    // only if the license is not None or not empty, then return the user selected.
+    const badgeLink = "![GitHub license](https://img.shields.io/badge/license-" + license + "-blue.svg)";
 
-    const licenseSection = "";
+    return badgeLink;
   }
-
-  return licenseSection;
+  // if there is nothing in license then return an empty string
+  return "";
 }
 
 // TODO: Create a function that returns the license link
 // If there is no license, return an empty string
+// This is implemented in makeTableOfContents()
 function renderLicenseLink (license) { }
 
 // TODO: Create a function that returns the license section of README
 // If there is no license, return an empty string
 function renderLicenseSection (license)
 {
-  if (license != "None")
+  if (license == "None")
   {
-    const licenseSection = ``;
+    // if the user selects none then disable the section
+    readmeSections.license.isEnabled = false;
   }
+
+  if (!license || license !== "None")
+  {
+    // getting the badge link 
+    const badgeLink = renderLicenseBadge();
+    // only if the license is not None or not empty, then return the user selected.
+    const licenseSection = heading2 + " " + readmeSections.license.label
+      + "\n"
+      + "<!-- License -->"
+      + badgeLink
+      + "\n"
+      + license
+      + "\n"
+      + lineBreak
+      ;
+
+    return licenseSection;
+  }
+
+  // if there is nothing in license then return an empty string
+  return "";
 }
 
 //
